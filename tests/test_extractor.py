@@ -1,13 +1,16 @@
 import unittest
 
-from extractor import get_valid_urls
+from extractor import validate
 
 
 class TestExtractor(unittest.TestCase):
     def test_parse_no_input(self):
         """
-        Test that it returns nothing if nothing is passed
+        Test that it raises an exception if no url is passed   
         """
+
+        url_input = "123123das"
+        self.assertRaises(Exception, lambda: validate(url_input))
 
     def test_parse_single_url(self):
         """
@@ -15,19 +18,8 @@ class TestExtractor(unittest.TestCase):
         """
 
         url_input = "http://google.com"
-        url_list = get_valid_urls({url_input})
-        self.assertIn(url_input, url_list)
-
-    def test_parse_multiple_urls(self):
-        """
-        Test that it can parse multiple urls and return those valid
-        """
-
-        url_input = "http://google.com"
-        url_bad_input = "admaxlawecfn "
-        url_list = get_valid_urls({url_input, url_bad_input})
-        self.assertIn(url_input, url_list)
-        self.assertNotIn(url_bad_input, url_list)
+        valid_url = validate(url_input)
+        self.assertIn(url_input, valid_url)
 
 
 if __name__ == '__main__':

@@ -1,18 +1,32 @@
 import sys
+import youtube_dl
 from validators.url import url
 
 
-def get_valid_urls(urls={}):
-    for url_candidate in urls:
-        if not url(url_candidate):
-            urls.remove(url_candidate)
+def extract(url: str):
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+        'restrictfilenames': True
+    }
 
-    return urls
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        ydl.download(url_list={url})
+
+
+def validate(url_candidate: str):
+    if not url(url_candidate):
+        raise Exception("The provided is not an url")
+    return url_candidate
 
 
 def main():
-    valid_urls = get_valid_urls(sys.argv)
-    print(valid_urls)
+    valid_url = validate(sys.argv[1])
+    extract(valid_url)
 
 
 if __name__ == "__main__":
