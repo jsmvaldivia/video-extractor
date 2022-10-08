@@ -11,7 +11,8 @@ def extract(url: str):
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
-        'restrictfilenames': True
+        'restrictfilenames': True,
+        'outtmpl': 'out/%(title)s-%(id)s.%(ext)s'
     }
 
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
